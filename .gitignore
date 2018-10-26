@@ -1,0 +1,8 @@
+.*.swp
+
+*.d
+*.o
+
+keywords
+papman
+*core

@@ -38,7 +38,8 @@ distclean: clean
 
 install: ${TARGET}
 	@if [ -d ${HOME}/local/bin/ ]; then\
-		install -v -C papman ${HOME}/local/bin;\
+		strip ${TARGET};\
+		install --compare --verbose ${TARGET} ${HOME}/local/bin;\
 	fi
 
 .PHONY: clean debug distclean install

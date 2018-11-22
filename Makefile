@@ -5,8 +5,7 @@ LIBS = -lstdc++fs
 TARGET = papman
 
 CXXFLAGS += -std=c++17
-CXXFLAGS += -MMD -MP
-DBGFLAGS += -g -ggdb3
+CXXFLAGS += -g -ggdb3 -MMD -MP
 
 ifeq ($(shell uname), FreeBSD)
 CXX = /usr/bin/clang++
@@ -30,9 +29,6 @@ ${TARGET}: ${OBJ}
 clean:
 	-@rm -fv ${TARGET} ${OBJ} *core
 
-debug:
-	${CXX} ${CXXFLAGS} ${DBGFLAGS} -o $@ $^ ${LDFLAGS}
-
 distclean: clean
 	-@rm -fv ${DEP}
 
@@ -42,4 +38,4 @@ install: ${TARGET}
 		install --compare --verbose ${TARGET} ${HOME}/local/bin;\
 	fi
 
-.PHONY: clean debug distclean install
+.PHONY: clean distclean install

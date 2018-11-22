@@ -36,6 +36,7 @@ bibliography is set to `$HOME/bib`.
 TODO
 ----
  * BUG: prevent duplicate entry addition/creation
+ * FTR: bibtex: add possibility to sort output
  * FTR: conf: create in .config/papman/conf and use bibtex format
  * FTR: log + verbosity level!
  * FTR: handle multiple item matches in all actions -> edit, open, show, bibtex

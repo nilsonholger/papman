@@ -362,10 +362,10 @@ std::string bib_format_entry(const BibEntry& entry, const std::string& format)
 			tmp.emplace_back(keywords.substr(0, keywords.find_first_of(';')));
 			keywords.erase(0, keywords.find_first_of(';')+1);
 		}
+		if (!keywords.empty()) tmp.emplace_back(keywords);
 		std::sort(tmp.begin(), tmp.end());
 		for (auto& t: tmp) sorted += t + ";";
 		if (!sorted.empty()) sorted.erase(sorted.end()-1);
-		std::cout << sorted << std::endl;
 		it->second = sorted;
 	}
 

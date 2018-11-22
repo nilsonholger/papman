@@ -427,14 +427,17 @@ BibEntry bib_import_entry(const fs::path& file)
 
 			// sanitize content
 			std::string content = line.substr(equal_pos+1, std::string::npos);
-			size_t lead = content.find_first_of('{');
-			size_t tail = content.find_last_of('}');
-			content = content.substr(lead==std::string::npos?0:lead+1, tail-2);
-			content.erase(std::remove_if(content.begin(), content.end(), [](char& c) { return c == '{' || c == '}'; }), content.end());
+			size_t lead = content.find_first_of("{\"");
+			if (lead!=std::string::npos) content.erase(0, lead+1);
+			size_t tail = content.find_last_of("}\"");
+			if (tail!=std::string::npos) content.erase(tail, std::string::npos);
 
 			// add to map
 			entry.data[id] = content;
 		} else {
+			// remove leading whitespace
+			line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int ch) { return !std::isspace(ch); }));
+
 			// handle last line, could be leftover from previous id
 			if (line.find('}')!=std::string::npos) line.erase(line.find('}'), std::string::npos);
 			if (!line.empty()) entry.data[id] += " " + line;

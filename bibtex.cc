@@ -352,6 +352,23 @@ std::string bib_format_entry(const BibEntry& entry, const std::string& format)
 		}
 	}
 
+	// sort keywords (if necessary)
+	auto it = std::find_if(vec.begin(), vec.end(), [](std::pair<std::string,std::string> p){return p.first=="keywords";});
+	if (it!=vec.end()) {
+		std::string keywords = it->second;
+		std::vector<std::string> tmp;
+		std::string sorted;
+		while (keywords.find_first_of(';')!=std::string::npos) {
+			tmp.emplace_back(keywords.substr(0, keywords.find_first_of(';')));
+			keywords.erase(0, keywords.find_first_of(';')+1);
+		}
+		std::sort(tmp.begin(), tmp.end());
+		for (auto& t: tmp) sorted += t + ";";
+		if (!sorted.empty()) sorted.erase(sorted.end()-1);
+		std::cout << sorted << std::endl;
+		it->second = sorted;
+	}
+
 	// calculate padding
 	unsigned int padding = 0;
 	for (auto& v: vec)

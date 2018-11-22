@@ -470,6 +470,7 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 			std::cout << "Invalid selection: " << selection << std::endl;
 			return;
 		} else {
+			// TODO catch map::at
 			entry.meta["type"] = std::next(type_fields.begin(), selection)->first;
 			std::cout << "Selected: " << entry.meta.at("type") << std::endl;
 		}
@@ -488,6 +489,7 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 		entry = bib_edit_entry(entry);
 	}
+	// TODO check entry's correctness
 
 	// set file path, add to entry, move given file into bib/...
 	std::string ext = name.substr(name.find_last_of('.')+1, std::string::npos);

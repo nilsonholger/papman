@@ -21,7 +21,7 @@ void usage()
 			<< "   bibtex <id> [format]       -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*\n"
 			<< "\nmaintenance:\n"
 			<< "   check                      -- check entries and files in './bib/'\n"
-			<< "   format                     -- order and (re)format entries in '" << bib_index << "'\n"
+			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_index << "[key]'\n"
 			<< "   dump [id]                  -- dump all/given [id]\n"
 			<< std::endl;
 		exit(0);
@@ -62,7 +62,7 @@ int main (int argc, char** argv)
 	} else if (arg=="check") {
 		bib_check(bib);
 	} else if (arg=="format") {
-		bib_format(bib);
+		bib_format(bib, argc>2 ? argv[2] : "");
 	} else if (arg=="dump") {
 		bib_dump(bib, argc>2 ? argv[2] : "");
 	} else {

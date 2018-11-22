@@ -381,7 +381,6 @@ std::string bib_format_entry(const BibEntry& entry, const std::string& format)
 		size_t lead = content.find_first_not_of(' ');
 		size_t tail = content.find_last_not_of(' ');
 		content = content.substr(lead==std::string::npos?0:lead, tail==0?std::string::npos:tail+1);
-		if (e->first=="title") content = "{" + content + "}";
 		s += ",\n\t" + e->first;
 		s.insert(s.size(), padding-e->first.length(), ' ');
 		s += " = {" + content + "}";

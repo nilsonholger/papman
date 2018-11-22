@@ -421,7 +421,7 @@ BibEntry bib_import_entry(const fs::path& file)
 		// separate 'id = content', content may span multiple lines
 		size_t equal_pos = line.find('=');
 		if (equal_pos != std::string::npos) {
-			// sanitize id
+			// sanitize (new) id
 			id = line.substr(0, equal_pos);
 			id.erase(std::remove_if(id.begin(), id.end(), ::isspace), id.end());
 
@@ -440,6 +440,8 @@ BibEntry bib_import_entry(const fs::path& file)
 
 			// handle last line, could be leftover from previous id
 			if (line.find('}')!=std::string::npos) line.erase(line.find('}'), std::string::npos);
+
+			// append
 			if (!line.empty()) entry.data[id] += " " + line;
 		}
 	}

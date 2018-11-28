@@ -1,0 +1,18 @@
+#! /bin/bash
+
+_GIT_STATUS=$(git diff --cached --name-status)
+_PDFS=$(echo "$_GIT_STATUS" | awk '/^[AM].*pdf\/.*.pdf/ {print $2}')
+_JSONS=$(echo "$_GIT_STATUS" | awk '/^[AM].*tex\/.*.bib/ {print $2}')
+
+for _PDF in $_PDFS; do
+	gs -dCompatibilityLevel=1.4 -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -sOutputFile=/tmp/`basename $_PDF` $_PDF
+	mv /tmp/`basename $_PDF` $_PDF
+	git add $_PDF
+	pdftotext -raw -nopgbrk $_PDF ${_PDF//pdf/txt}
+	git add ${_PDF//pdf/txt}
+done
+
+for _JSON in $_JSONS; do
+	papman format
+	git add $_JSON
+done

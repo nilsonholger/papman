@@ -33,6 +33,14 @@ LOCATIONS
 Papman's default config is in `$HOME/.config/papman/conf` and it's default
 bibliography is set to `$HOME/bib`.
 
+GIT-PRE-COMMIT-HOOK
+-------------------
+If you archive/distribute/manage/share your bibliography using git, there's a
+git pre-commit hook in `git.hook.pre-commit` that you can drop into
+`<BIB>/.git/hooks/pre-commit`. It will compress new committed PDF files (using
+ghostscript), extract the PDF into a TXT file (using pdftotext) and (re-)format
+new bib entries (using papman, of course).
+
 TODO
 ----
  * BUG: prevent duplicate entry addition/creation

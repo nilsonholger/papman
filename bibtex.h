@@ -17,14 +17,14 @@ using Bibliography = std::map<std::string, BibEntry>;
 
 
 // bibliography commands
-Bibliography bib_load(const fs::path& dir); // read files from 'bib_index'/*.bib
+Bibliography bib_load(const fs::path& dir); // read files from 'bib_tex'/*.bib
 void bib_check(const Bibliography& bib); // check bibliography entries and directories
 size_t bib_dump(const Bibliography& bib, const std::string& key); // print all fields + meta
 void bib_find(const Bibliography& bib, const std::string& key); // search for given key
 void bib_format(const Bibliography& bib, const std::string& key = {}); // (re-)format (all) entry(s)
 void bib_list(const Bibliography& bib, const std::string& key); // list all entries' ids
 Bibliography bib_match(const Bibliography& bib, const std::string& regex); // find/match entry(s)
-void bib_store(const BibEntry& entry); // store in 'bib_index'/<id>.bib
+void bib_store(const BibEntry& entry); // store in 'bib_tex'/<id>.bib
 
 // bibliography entry manipulation commands
 BibEntry bib_edit_entry(const BibEntry& entry); // edit only

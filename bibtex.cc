@@ -87,7 +87,7 @@ void bib_check(const Bibliography& bib)
 	check_msg(msg, "PLEASE FIX FIELDS: <EMPTY> !NOT_FOUND! [MISSING] +EXTRA+");
 
 	// check bib directories (correct files in correct places, with correct id???)
-	for (auto& dir: {get_home() + bib_files, get_home() + bib_index}) {
+	for (auto& dir: {get_home() + bib_files, get_home() + bib_tex}) {
 		for (fs::directory_iterator file{dir}; file != fs::directory_iterator(); ++file) {
 			std::string id = file->path().string();
 			id.erase(0, id.find_last_of('/')+1);
@@ -250,7 +250,7 @@ void bib_store(const BibEntry& entry)
 {
 	std::ofstream file;
 	try {
-		file.open(get_home() + bib_index + entry.meta.at("id") + ".bib");
+		file.open(get_home() + bib_tex + entry.meta.at("id") + ".bib");
 	} catch (std::out_of_range e) {
 		std::cout << "ERROR: " << e.what() << std::endl;
 	}

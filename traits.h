@@ -8,7 +8,7 @@
 
 static const std::string bib_base = "bib/";
 static const std::string bib_files = bib_base + "pdf/";
-static const std::string bib_index = bib_base + "tex/";
+static const std::string bib_tex = bib_base + "tex/";
 static const std::string bib_meta = bib_base + "meta/";
 static const std::string bib_keywords = bib_meta + "keywords";
 

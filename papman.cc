@@ -21,7 +21,7 @@ void usage()
 			<< "   bibtex <id> [format]       -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*\n"
 			<< "\nmaintenance:\n"
 			<< "   check                      -- check entries and files in './bib/'\n"
-			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_index << "[key]'\n"
+			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_tex << "[key]'\n"
 			<< "   dump [id]                  -- dump all/given [id]\n"
 			<< std::endl;
 		exit(0);
@@ -30,8 +30,8 @@ void usage()
 int main (int argc, char** argv)
 {
 	if (argc==1) usage();
-	Bibliography bib = bib_load(get_home() + bib_index);
-	//TODO LOG STUFF std::cout << get_home() + bib_index << std::endl;
+	Bibliography bib = bib_load(get_home() + bib_tex);
+	//TODO LOG STUFF std::cout << get_home() + bib_tex << std::endl;
 	//std::cout << bib.size() << std::endl;
 
 	// <action> *args*

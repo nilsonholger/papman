@@ -276,6 +276,9 @@ BibEntry bib_edit_entry(const BibEntry& entry)
 	}
 	std::system(std::string{"${EDITOR} \"" + file.string() + "\""}.c_str());
 
+	// TODO check item's id, should be lastnameCONFYEARdesc
+	// TODO: prevent duplicate entry addition/creation
+
 	// load and check (edited) item
 	BibEntry entry_new = bib_import_entry(file);
 	if (entry_new.data.empty()) {

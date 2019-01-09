@@ -23,6 +23,7 @@ size_t bib_dump(const Bibliography& bib, const std::string& key); // print all f
 void bib_find(const Bibliography& bib, const std::string& key); // search for given key
 void bib_format(const Bibliography& bib, const std::string& key = {}); // (re-)format (all) entry(s)
 void bib_list(const Bibliography& bib, const std::string& key); // list all entries' ids
+// TODO handle multiple item matches in all actions -> edit, open, show, bibtex
 Bibliography bib_match(const Bibliography& bib, const std::string& regex); // find/match entry(s)
 void bib_store(const BibEntry& entry); // store in 'bib_tex'/<id>.bib
 

@@ -6,6 +6,8 @@
 
 
 
+// TODO create/use config file in .config/papman/conf (use bibtex format)
+
 static const std::string bib_base = "bib/";
 static const std::string bib_files = bib_base + "pdf/";
 static const std::string bib_tex = bib_base + "tex/";

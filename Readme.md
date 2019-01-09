@@ -40,15 +40,3 @@ git pre-commit hook in `git.hook.pre-commit` that you can drop into
 `<BIB>/.git/hooks/pre-commit`. It will compress new committed PDF files (using
 ghostscript), extract the PDF into a TXT file (using pdftotext) and (re-)format
 new bib entries (using papman, of course).
-
-TODO
-----
- * BUG: prevent duplicate entry addition/creation
- * FTR: bibtex: add possibility to sort output
- * FTR: conf: create in .config/papman/conf and use bibtex format
- * FTR: log + verbosity level!
- * FTR: handle multiple item matches in all actions -> edit, open, show, bibtex
- * FTR: add "sources" to actions -> list, edit, show, open(url)
- * FTR: list references
- * FTR: stats (#, per year/conference/author)
- * FTR: author details (#, chronological order)

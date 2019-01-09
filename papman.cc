@@ -8,21 +8,26 @@
 
 void usage()
 {
-		std::cout << "usage: <command> [args...]    -- <mandatory> [optional] *default*\n"
+		std::cout
+			<< "usage: <command> [args...]    -- <mandatory> [optional] *default*\n"
 			<< "\nbuild:\n"
 			<< "   add <file.pdf> [tex.bib]   -- add file.pdf, try file.bib [use tex.bib]\n"
 			<< "   edit <id>                  -- edit given id\n"
 			<< "\ndiscovery:\n"
+			// TODO author <id>                -- list authors papers in chronological order
 			<< "   find <key>                 -- search entries for given key\n"
 			<< "   keywords [key]             -- list keywords [or belonging papers]\n"
 			<< "   link [keyword]             -- creates keyword[s] hardlink folder[s]\n"
-			<< "   list [key]                 -- list paper ids [sort by key: *name*, year]\n" // TODO conf
+			<< "   list [key]                 -- list paper ids [sort by key: *name*, year]\n" // TODO key: conf
+			// TODO refs <id>                  -- list/show paper's references (parsed from paper's txt)
+			// TODO stats [key]                -- list statistics [by key: ...] (#, per year/conference/author)
 			<< "\nexport:\n"
 			<< "   bibtex <id> [format]       -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*\n"
 			<< "\nmaintenance:\n"
 			<< "   check                      -- check entries and files in './bib/'\n"
 			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_tex << "[key]'\n"
 			<< "   dump [id]                  -- dump all/given [id]\n"
+			// TODO rename <id>                -- rename id (and try to rename associated files)
 			<< std::endl;
 		exit(0);
 }
@@ -31,7 +36,8 @@ int main (int argc, char** argv)
 {
 	if (argc==1) usage();
 	Bibliography bib = bib_load(get_home() + bib_tex);
-	//TODO LOG STUFF std::cout << get_home() + bib_tex << std::endl;
+	// TODO logging facility with verbosity level
+	// TODO LOG STUFF std::cout << get_home() + bib_tex << std::endl;
 	//std::cout << bib.size() << std::endl;
 
 	// <action> *args*

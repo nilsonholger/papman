@@ -23,8 +23,11 @@ using TypeFields = std::map<std::string, Fields>;
 static const TypeFields type_fields = {
 /*	---type----------- ---required fields (from tex bib reference style)-----   ---optional----------------------------------------------------------------------------------------------------------   ---custom (internal)--- */
 	{ "article",       { "author", "title", "journal", "year", "volume",        "number", "pages","month", "doi", "abstract",                                                                           CUSTOM_FIELDS } },
+	{ "book",          { "author", "title", "publisher", "year",                "volume", "number", "series", "address", "edition", "month",                                                            CUSTOM_FIELDS } },
 	{ "incollection",  { "author", "title", "booktitle", "publisher", "year",   "editor", "volume", "number", "series", "type", "chapter", "pages", "address", "edition", "month", "doi", "abstract",   CUSTOM_FIELDS } },
 	{ "inproceedings", { "author", "title", "booktitle", "year",                "editor", "volume", "number", "series", "pages", "address", "month", "organization", "publisher", "doi", "abstract",    CUSTOM_FIELDS } },
+	{ "manual",        { "title",                                               "author", "organization", "address", "edition", "month", "year",                                                        CUSTOM_FIELDS } },
+	{ "techreport",    { "author", "title", "institution", "year",              "type", "number", "address", "month",                                                                                   CUSTOM_FIELDS } },
 	{ "unpublished",   { "author", "title",                                     "year", "month",                                                                                                        CUSTOM_FIELDS } }
 };
 

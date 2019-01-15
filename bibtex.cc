@@ -264,7 +264,7 @@ void bib_store(const BibEntry& entry)
 
 BibEntry bib_edit_entry(const BibEntry& entry)
 {
-	fs::path file{"/tmp/papman_"+entry.meta.at("file")};
+	fs::path file{"/tmp/papman_" + entry.meta.at("file") + ".bib"};
 
 	// check tmp file status and populate
 	if (fs::exists(file)) {

@@ -284,7 +284,7 @@ BibEntry bib_edit_entry(const BibEntry& entry)
 	if (entry_new.data.empty()) {
 		std::cerr << "Could not add '" << entry.meta.at("id")
 			<< "' from: " << file.string() << std::endl;
-		return entry;
+		std::exit(EXIT_FAILURE);
 	} else {
 		std::system(std::string{"rm \"" + file.string() + "\""}.c_str());
 		return entry_new;

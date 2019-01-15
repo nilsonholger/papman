@@ -410,6 +410,7 @@ BibEntry bib_import_entry(const fs::path& file)
 		if (entry.data.empty() && line.find('@') != std::string::npos) {
 			if (line.find('{') != std::string::npos) {
 				std::string type = line.substr(line.find('@')+1, line.find('{')-line.find('@')-1);
+				type.erase(std::remove_if(type.begin(), type.end(), ::isspace), type.end());
 				std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 				entry.meta["type"] = type;
 				if (line.find(',') != std::string::npos) {
@@ -482,8 +483,13 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 
 	// fill/create (empty) entry using selected type
 	try { entry.meta.at("id"); } catch (std::out_of_range) { entry.meta["id"] = "CHANGE_ME"; }
-	for (auto& field: type_fields.at(entry.meta.at("type"))) {
-		try { entry.data.at(field); } catch (std::out_of_range) { entry.data[field] = ""; }
+	try {
+		for (auto& field: type_fields.at(entry.meta.at("type"))) {
+			try { entry.data.at(field); } catch (std::out_of_range) { entry.data[field] = ""; }
+		}
+	} catch (std::out_of_range) {
+		std::cout << "Unsupported bibtex entry type requested: '" << entry.meta.at("type") << "'" << std::endl;
+		return;
 	}
 
 	// TODO create output without extra pair of curly braces

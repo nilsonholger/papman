@@ -486,6 +486,10 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		try { entry.data.at(field); } catch (std::out_of_range) { entry.data[field] = ""; }
 	}
 
+	// TODO create output without extra pair of curly braces
+	// suggest title protection (prevents bib style to alter case)
+	if (entry.data.at("title").empty()) entry.data.at("title") = "{}";
+
 	// list all currently known keywords
 	BibEntry keywords = bib_import_entry(get_home() + bib_keywords);
 	std::string keywords_str {};

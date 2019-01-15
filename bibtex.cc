@@ -458,6 +458,7 @@ BibEntry bib_import_entry(const fs::path& file)
 void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 {
 	BibEntry entry = bibtex;
+	entry.meta["file"] = name;
 
 	// select type if entry empty
 	if (entry.data.empty()) {

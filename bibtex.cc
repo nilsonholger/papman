@@ -486,6 +486,13 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		try { entry.data.at(field); } catch (std::out_of_range) { entry.data[field] = ""; }
 	}
 
+	// list all currently known keywords
+	BibEntry keywords = bib_import_entry(get_home() + bib_keywords);
+	std::string keywords_str {};
+	for (auto& k: keywords.data) keywords_str = keywords_str + k.first + ";";
+	if (!keywords_str.empty()) keywords_str.erase(keywords_str.end()-1);
+	entry.data.at("keywords") = keywords_str;
+
 	// edit entry
 	entry = bib_edit_entry(entry);
 	while (entry.meta.at("id")=="CHANGE_ME") {
@@ -493,7 +500,10 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 		entry = bib_edit_entry(entry);
 	}
+
 	// TODO check entry's correctness
+	// empty keyword list if unmodified
+	if (entry.data.at("keywords")==keywords_str) entry.data.at("keywords") = "";
 
 	// set file path, add to entry, move given file into bib/...
 	std::string ext = name.substr(name.find_last_of('.')+1, std::string::npos);

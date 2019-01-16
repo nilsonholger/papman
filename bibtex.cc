@@ -277,7 +277,8 @@ BibEntry bib_edit_entry(const BibEntry& entry)
 	std::system(std::string{"${EDITOR} \"" + file.string() + "\""}.c_str());
 
 	// TODO check item's id, should be lastnameCONFYEARdesc
-	// TODO: prevent duplicate entry addition/creation
+	// TODO prevent duplicate entry addition/creation
+	// TODO if temp file empty, delete it
 
 	// load and check (edited) item
 	BibEntry entry_new = bib_import_entry(file);
@@ -435,6 +436,7 @@ BibEntry bib_import_entry(const fs::path& file)
 			if (lead!=std::string::npos) content.erase(0, lead+1);
 			size_t tail = content.find_last_of("}\"");
 			if (tail!=std::string::npos) content.erase(tail, std::string::npos);
+			// TODO consider last line ending with id = {...},} <- closing @...{
 
 			// add to map
 			entry.data[id] = content;
@@ -511,7 +513,7 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		entry = bib_edit_entry(entry);
 	}
 
-	// TODO check entry's correctness
+	// TODO check entry's correctness: id, ...
 	// empty keyword list if unmodified
 	if (entry.data.at("keywords")==keywords_str) entry.data.at("keywords") = "";
 

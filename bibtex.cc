@@ -443,7 +443,7 @@ BibEntry bib_import_entry(const fs::path& file)
 			line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int ch) { return !std::isspace(ch); }));
 
 			// handle last line, could be leftover from previous id
-			if (line.find('}')!=std::string::npos) line.erase(line.find('}'), std::string::npos);
+			if (line.find_last_of("}\"")!=std::string::npos) line.erase(line.find_last_of("}\""), std::string::npos);
 
 			// append
 			if (!line.empty()) entry.data[id] += " " + line;

@@ -6,6 +6,7 @@ TARGET = papman
 
 CXXFLAGS += -std=c++17
 CXXFLAGS += -g -ggdb3 -MMD -MP
+INSTALL = install --compare --verbose
 
 ifeq ($(shell uname), FreeBSD)
 CXX = /usr/bin/clang++
@@ -17,6 +18,7 @@ ifeq ($(shell  uname), Darwin)
 CXX = /usr/local/bin/g++-8
 CXXFLAGS += -I /usr/local/include/
 LDFLAGS += -L /usr/local/lib/
+INSTALL = install -Cv
 endif
 
 all: ${TARGET}
@@ -30,12 +32,12 @@ clean:
 	-@rm -fv ${TARGET} ${OBJ} *core
 
 distclean: clean
-	-@rm -fv ${DEP}
+	-@rm -rfv ${DEP} ${TARGET}.dSYM
 
 install: ${TARGET}
 	@if [ -d ${HOME}/local/bin/ ]; then\
 		strip ${TARGET};\
-		install --compare --verbose ${TARGET} ${HOME}/local/bin;\
+		${INSTALL} ${TARGET} ${HOME}/local/bin;\
 	fi
 
 .PHONY: clean distclean install

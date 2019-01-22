@@ -178,10 +178,11 @@ void bib_find(const Bibliography& bib, const std::string& key)
 				matches.emplace_back(item.first + ": " + item.second);
 		}
 		// output matches
-		if (!matches.empty())
+		if (!matches.empty()) {
 			std::cout << item.first << ":" << std::endl;
 			for (auto match: matches)
 				std::cout << "\t" << match << std::endl;
+		}
 	}
 }
 

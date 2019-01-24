@@ -11,6 +11,7 @@
 #include <fstream>
 #include <regex>
 #include <sstream>
+#include <stack>
 #include <thread>
 #include <vector>
 
@@ -401,55 +402,105 @@ BibEntry bib_import_entry(const fs::path& file)
 {
 	BibEntry entry;
 	entry.meta["file"] = file.filename().string();
-	std::string line;
-	std::string id;
 	std::ifstream in{file};
+	char token {};
+	std::string str {};
+	std::string field {};
+	bool escape_char {};
+	std::stack<char> delim {};
+	enum class type : short {
+		none, entry_type, id, field, value
+	} type {type::none};
+
 	if (!in.is_open()) return {};
 
-	// parse file by line
-	while (std::getline(in, line)) {
-		// get entry type
-		if (entry.data.empty() && line.find('@') != std::string::npos) {
-			if (line.find('{') != std::string::npos) {
-				std::string type = line.substr(line.find('@')+1, line.find('{')-line.find('@')-1);
-				type.erase(std::remove_if(type.begin(), type.end(), ::isspace), type.end());
-				std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-				entry.meta["type"] = type;
-				if (line.find(',') != std::string::npos) {
-					entry.meta["id"] = line.substr(line.find('{')+1, line.find(',')-line.find('{')-1);
-				}
-			} else {
-				entry.meta["type"] = "";
-			}
+	while (in.get(token)) // TODO speedup using std::basic_istream::getline() searching for specific stop token?
+	{
+		// simply add escaped characters to string
+		if (escape_char) {
+			str += token;
+			escape_char = false;
 			continue;
 		}
 
-		// separate 'id = content', content may span multiple lines
-		size_t equal_pos = line.find('=');
-		if (equal_pos != std::string::npos) {
-			// sanitize (new) id
-			id = line.substr(0, equal_pos);
-			id.erase(std::remove_if(id.begin(), id.end(), ::isspace), id.end());
+		switch (token) {
+			case '@': // '@' usually starts new bibtex entry
+				if (type==type::none) type = type::entry_type;
+				else if (type==type::value) str+= token;
+				break;
 
-			// sanitize content
-			std::string content = line.substr(equal_pos+1, std::string::npos);
-			size_t lead = content.find_first_of("{\"");
-			if (lead!=std::string::npos) content.erase(0, lead+1);
-			size_t tail = content.find_last_of("}\"");
-			if (tail!=std::string::npos) content.erase(tail, std::string::npos);
-			// TODO consider last line ending with id = {...},} <- closing @...{
+			case ' ': case '\t': // ignore whitespace unless inside value
+				if (type==type::value) str += token;
+				break;
 
-			// add to map
-			entry.data[id] = content;
-		} else {
-			// remove leading whitespace
-			line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int ch) { return !std::isspace(ch); }));
+			case '=': // separate field and value
+				if (type==type::field) {
+					field = str;
+					str = {};
+					type = type::none;
+				} else if (type==type::value) {
+					str += token;
+				}
+				break;
 
-			// handle last line, could be leftover from previous id
-			if (line.find_last_of("}\"")!=std::string::npos) line.erase(line.find_last_of("}\""), std::string::npos);
+			case '\\': // ignore next token
+				if (type==type::value) str += token;
+				escape_char = true;
+				break;
 
-			// append
-			if (!line.empty()) entry.data[id] += " " + line;
+			case ',': // store 'id' or field=value pair
+				if (type==type::id) {
+					entry.meta["id"] = str;
+					str = {};
+					type = type::field;
+				} else if (type==type::none) {
+					std::transform(field.begin(), field.end(), field.begin(), ::tolower);
+					entry.data[field] = str;
+					str = {};
+					type = type::field;
+				} else if (type==type::value) {
+					str += token;
+				}
+				break;
+
+			case '{': // { used as value delimiter, inside value or delimits type and id
+				if (delim.size()==1) type = type::value;
+				if (delim.size()>1 && type==type::value) str += token;
+				if (type==type::entry_type) {
+					std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+					entry.meta["type"] = str;
+					str = {};
+					type=type::id;
+				}
+				delim.push('{');
+				break;
+
+			case '}': // } used as delimiter or inside value, might have to store last field=value pair
+				if (delim.top()=='{') delim.pop();
+				if (delim.size()==1) type = type::none;
+				if (delim.size()>1 && type==type::value) str += token;
+				if (delim.size()==0 && !str.empty()) {
+					std::transform(field.begin(), field.end(), field.begin(), ::tolower);
+					entry.data[field] = str;
+					str = {};
+				}
+				break;
+
+			case '"': // " used as delimiter (must be escaped inside value)
+				if (delim.top()=='"') delim.pop();
+				else {
+					type = type::value;
+					delim.push('"');
+				}
+				if (delim.size()==1) type = type::none;
+				break;
+
+			case '\n': // newline should (sometimets) turn into a space
+				if (type==type::value && !str.empty()) str += " ";
+				break;
+
+			default: // simple (leftover) token
+				str += token;
 		}
 	}
 

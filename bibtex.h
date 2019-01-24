@@ -10,7 +10,7 @@
 namespace fs = std::experimental::filesystem;
 
 using Map = std::map<std::string, std::string>;
-struct BibEntry { Map meta; Map data; };
+struct BibEntry { Map meta {}; Map data {}; };
 using BibEntryVec = std::vector<std::pair<std::string, std::string>>;
 using Bibliography = std::map<std::string, BibEntry>;
 

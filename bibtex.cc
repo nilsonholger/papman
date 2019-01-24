@@ -474,7 +474,7 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 		}
 		std::cout << "? ";
 		std::cin >> selection;
-		if (selection<0 || selection>type_fields.size()-1) {
+		if (selection>type_fields.size()-1) {
 			std::cout << "Invalid selection: " << selection << std::endl;
 			return;
 		} else {

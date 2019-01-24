@@ -6,6 +6,7 @@ TARGET = papman
 
 CXXFLAGS += -std=c++17
 CXXFLAGS += -g -ggdb3 -MMD -MP
+CXXFLAGS += -W -Wall -Wextra -Weffc++ -Wpedantic -pedantic-errors
 INSTALL = install --compare --verbose
 
 ifeq ($(shell uname), FreeBSD)

@@ -55,7 +55,7 @@ static const TypeFields type_fields = {
 	{ "incollection",  { "author", "title", "booktitle", "publisher", "year",   "editor", "volume", "number", "series", "type", "chapter", "pages", "address", "edition", "month", "doi", "abstract",   CUSTOM_FIELDS } },
 	{ "inproceedings", { "author", "title", "booktitle", "year",                "editor", "volume", "number", "series", "pages", "address", "month", "organization", "publisher", "doi", "abstract",    CUSTOM_FIELDS } },
 	{ "manual",        { "title",                                               "author", "organization", "address", "edition", "month", "year",                                                        CUSTOM_FIELDS } },
-	{ "phdthesis",     { "author", "title", "school", "year",                   "type", "address", "month"                                                                                              CUSTOM_FIELDS } },
+	{ "phdthesis",     { "author", "title", "school", "year",                   "type", "address", "month",                                                                                             CUSTOM_FIELDS } },
 	{ "techreport",    { "author", "title", "institution", "year",              "type", "number", "address", "month",                                                                                   CUSTOM_FIELDS } },
 	{ "unpublished",   { "author", "title",                                     "year", "month",                                                                                                        CUSTOM_FIELDS } }
 };

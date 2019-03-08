@@ -22,12 +22,18 @@ void usage()
 			// TODO refs <id>                  -- list/show paper's references (parsed from paper's txt)
 			// TODO stats [key]                -- list statistics [by key: ...] (#, per year/conference/author)
 			<< "\nexport:\n"
-			<< "   bibtex <id> [format]       -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*\n"
+			<< "   bibtex <id> [format [mod]] -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*, mod: see [modifier]\n"
 			<< "\nmaintenance:\n"
 			<< "   check                      -- check entries and files in './bib/'\n"
 			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_tex << "[key]'\n"
 			<< "   dump [id]                  -- dump all/given [id]\n"
 			// TODO rename <id>                -- rename id (and try to rename associated files)
+			<< "\n\n[modifier]\n"
+			<< "   none       -- don't modify (default)\n"
+			<< "   link       -- use DOI or URL, prefer DOI\n"
+			<< "   doi        -- if DOI available: \\href{https://doi.org/<DOI>}{<title>}\n"
+			<< "   url        -- if URL available: \\href{<URL>}{<title>}\n"
+			<< "   urlonly    -- if DOI empty, but URL available: \\href{<URL>}{<title>}\n"
 			<< std::endl;
 		exit(0);
 }
@@ -64,7 +70,7 @@ int main (int argc, char** argv)
 	} else if (arg=="list") {
 		bib_list(bib, (argc>2 ? argv[2] : "name"));
 	} else if (arg=="bibtex") {
-		bib_print_entries(bib, argc>2 ? argv[2] : ".*", argc>3 ? argv[3] : "full");
+		bib_print_entries(bib, argc>2 ? argv[2] : ".*", argc>3 ? argv[3] : "full", argc>4 ? argv[4] : "none");
 	} else if (arg=="check") {
 		bib_check(bib);
 	} else if (arg=="format") {

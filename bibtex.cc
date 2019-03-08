@@ -215,7 +215,7 @@ void bib_list(const Bibliography& bib, const std::string& key)
 				entries.push_back({entry.first, entry.second.data.at("year")});
 			} catch (std::out_of_range) {
 				std::cout << "WARNING " << entry.first
-					<< "has no \"year\" field!" << std::endl;
+					<< " has no \"year\" field!" << std::endl;
 			}
 		std::sort(entries.begin(), entries.end(),
 				[](auto& e1, auto& e2) {return e1.second<e2.second;});
@@ -510,6 +510,49 @@ BibEntry bib_import_entry(const fs::path& file)
 
 
 
+BibEntry bib_modify_entry(const BibEntry& entry, const std::string& modifier)
+{
+	BibEntry e = entry;
+	std::function try_mod_catch = [&e](const std::string& field, const std::string& prefix){
+		try {
+			if (!e.data.at(field).empty())
+				e.data.at("title") = "\\href{" + prefix + e.data.at(field) + "}{" + e.data.at("title") + "}";
+		} catch (std::out_of_range) {
+			std::cerr << "WARNING " << e.meta.at("id")
+				<< " has no \"" << field << "\" field!" << std::endl;
+		}
+	};
+
+	if (modifier=="none") {
+		return e;
+	} else if (modifier=="link") {
+		if (e.data.find("doi")!=e.data.end() && !e.data.at("doi").empty())
+			try_mod_catch("doi", "https://doi.org/");
+		else if (e.data.find("url")!=e.data.end() && !e.data.at("url").empty())
+			try_mod_catch("url", "");
+	} else if (modifier=="doi") {
+		try_mod_catch("doi", "https://doi.org/");
+	} else if (modifier=="url") {
+		try_mod_catch("url", "");
+	} else if (modifier=="urlonly") {
+		try {
+			if (!e.data.at("url").empty()) {
+				if (e.data.find("doi")==e.data.end())
+					try_mod_catch("url", "");
+				else if (e.data.at("doi").empty())
+					try_mod_catch("url", "");
+			}
+		} catch (std::out_of_range) {
+			std::cerr << "WARNING " << e.meta.at("id")
+				<< " has no \"url\" field!" << std::endl;
+		}
+	} else {
+		std::cerr << "WARNING Invalid modifier: " << modifier << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+	return e;
+}
+
 void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 {
 	BibEntry entry = bibtex;
@@ -586,12 +629,13 @@ void bib_new_entry(const std::string& name, const BibEntry& bibtex)
 
 
 
-void bib_print_entries(const Bibliography& bib, const std::string& key, const std::string& format)
+void bib_print_entries(const Bibliography& bib, const std::string& key, const std::string& format, const std::string& modifier)
 {
 	Bibliography entries = bib_match(bib, key);
 	if (entries.empty()) return;
 
 	for (auto& entry: entries) {
+		entry.second = bib_modify_entry(entry.second, modifier);
 		std::cout << bib_format_entry(entry.second, format) << std::endl;
 	}
 }

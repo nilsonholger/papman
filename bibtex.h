@@ -31,8 +31,9 @@ void bib_store(const BibEntry& entry); // store in 'bib_tex'/<id>.bib
 BibEntry bib_edit_entry(const BibEntry& entry); // edit only
 std::string bib_format_entry(const BibEntry& entry, const std::string& format); // prepare/format entry for export/print
 BibEntry bib_import_entry(const fs::path& file); // import/parse from file
+BibEntry bib_modify_entry(const BibEntry& entry, const std::string& modifier); // modify bib entry according to requested modifier
 void bib_new_entry(const std::string& name, const BibEntry& bibtex = {}); // create new bib item
-void bib_print_entries(const Bibliography & bib, const std::string& key, const std::string& format); // display/show/print selected entry(s)
+void bib_print_entries(const Bibliography & bib, const std::string& key, const std::string& format, const std::string& modifier); // display/show/print selected entry(s)
 
 // keyword commands
 void keywords_search(const Bibliography& bib, const std::string& keyword);

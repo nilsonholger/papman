@@ -483,7 +483,7 @@ BibEntry bib_import_entry(const fs::path& file)
 				if (delim.top()=='{') delim.pop();
 				if (delim.size()==1) type = type::none;
 				if (delim.size()>1 && type==type::value) str += token;
-				if (delim.size()==0 && !str.empty()) {
+				if (delim.size()==0 && type==type::none) {
 					std::transform(field.begin(), field.end(), field.begin(), ::tolower);
 					entry.data[field] = str;
 					str = {};

@@ -24,7 +24,7 @@ void usage()
 			<< "\nexport:\n"
 			<< "   bibtex <id> [format [mod]] -- print selected [id] (can be regexp, e.g., '.*'), format: short, long, *full*, mod: see [modifier]\n"
 			<< "\nmaintenance:\n"
-			<< "   check                      -- check entries and files in './bib/'\n"
+			<< "   check [noempty]            -- check entries and files in './bib/' [ignore empty fields]\n"
 			<< "   format [key]               -- order and (re)format entry(s) in '" << bib_tex << "[key]'\n"
 			<< "   dump [id]                  -- dump all/given [id]\n"
 			// TODO rename <id>                -- rename id (and try to rename associated files)
@@ -72,7 +72,7 @@ int main (int argc, char** argv)
 	} else if (arg=="bibtex") {
 		bib_print_entries(bib, argc>2 ? argv[2] : ".*", argc>3 ? argv[3] : "full", argc>4 ? argv[4] : "none");
 	} else if (arg=="check") {
-		bib_check(bib);
+		bib_check(bib, argc>2 ? argv[2] : "");
 	} else if (arg=="format") {
 		bib_format(bib, argc>2 ? argv[2] : "");
 	} else if (arg=="dump") {

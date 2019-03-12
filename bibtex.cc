@@ -29,8 +29,12 @@ Bibliography bib_load(const fs::path& dir)
 
 
 
-void bib_check(const Bibliography& bib)
+void bib_check(const Bibliography& bib, const std::string& arg)
 {
+	bool show_empty = true;
+	if (arg=="noempty") show_empty = false;
+
+	// output functional to collect and properly format faulty fields
 	std::function check_msg = [](std::stringstream& ss, const std::string& header) {
 		std::string separator;
 		separator.resize(header.length(), '=');
@@ -63,7 +67,7 @@ void bib_check(const Bibliography& bib)
 		}
 		for (auto& field: type_fields.at(type)) {
 			try {
-				if (entry.second.data.at(field).empty())
+				if (entry.second.data.at(field).empty() && show_empty)
 					faulty_fields += " <" + field + ">";
 			} catch (std::out_of_range) {
 				faulty_fields += " [" + field + "]";

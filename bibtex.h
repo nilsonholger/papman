@@ -18,7 +18,7 @@ using Bibliography = std::map<std::string, BibEntry>;
 
 // bibliography commands
 Bibliography bib_load(const fs::path& dir); // read files from 'bib_tex'/*.bib
-void bib_check(const Bibliography& bib); // check bibliography entries and directories
+void bib_check(const Bibliography& bib, const std::string& arg); // check bibliography entries and directories
 size_t bib_dump(const Bibliography& bib, const std::string& key); // print all fields + meta
 void bib_find(const Bibliography& bib, const std::string& key); // search for given key
 void bib_format(const Bibliography& bib, const std::string& key = {}); // (re-)format (all) entry(s)

@@ -47,7 +47,7 @@ void bib_check(const Bibliography& bib)
 	std::stringstream msg;
 	Bibliography b = bib;
 	for (auto& entry: b) {
-		std::string missing;
+		std::string faulty_fields;
 		std::string type;
 		try {
 			type = entry.second.meta.at("type");
@@ -64,9 +64,9 @@ void bib_check(const Bibliography& bib)
 		for (auto& field: type_fields.at(type)) {
 			try {
 				if (entry.second.data.at(field).empty())
-					missing += " <" + field + ">";
+					faulty_fields += " <" + field + ">";
 			} catch (std::out_of_range) {
-				missing += " [" + field + "]";
+				faulty_fields += " [" + field + "]";
 			}
 			if (field=="file") {
 				std::string path;
@@ -75,15 +75,15 @@ void bib_check(const Bibliography& bib)
 					std::cerr << "Error checking " << entry.first << "." << field << ": " << e.what() << std::endl;
 				}
 				if (!fs::is_regular_file(get_home() + path))
-					missing += " !file!";
+					faulty_fields += " !file!";
 			}
 			entry.second.data.erase(field);
 		}
 
 		if (!entry.second.data.empty())
 			for (auto& field: entry.second.data)
-				missing += " +" + field.first + "+";
-		if (! missing.empty()) msg << entry.first << ":" << missing << std::endl;
+				faulty_fields += " +" + field.first + "+";
+		if (! faulty_fields.empty()) msg << entry.first << ":" << faulty_fields << std::endl;
 	}
 	check_msg(msg, "PLEASE FIX FIELDS: <EMPTY> !NOT_FOUND! [MISSING] +EXTRA+");
 
